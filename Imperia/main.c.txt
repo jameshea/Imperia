@@ -1,0 +1,118 @@
+#include <cstdlib>
+
+#include "SFML\Graphics.hpp"
+#include "objects.h"
+
+
+int main()
+{
+	int counter = 0;
+	std::vector <ship> vecship;
+	ship classship;
+	classship.create(500, 500);
+	vecship.push_back(classship);
+
+
+	//Create Event//
+	sf::Texture text_back;
+	text_back.loadFromFile("Resources/Backgrounds/background.png");
+	text_back.setRepeated(true);
+	sf::Sprite spr_back;
+	spr_back.setTexture(text_back);
+	spr_back.setTextureRect(sf::IntRect(0, 0, 1024, 640));
+
+	game.create();
+
+	player1.create(100, 100);
+	player1.rotate(-45);
+
+	while (counter < 15){
+		meteor[counter].create();
+		counter++;
+	}
+	counter = 0;
+
+	bullet.create();
+	//Create Event//
+
+
+    //Game Loop//
+    while (window.isOpen())
+    {
+        //Check Events//
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            //Close Event//
+            if (event.type == sf::Event::Closed)
+                window.close();
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                window.close();
+			//Close Event//
+
+			//Restart Event !!BETA!!//
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde))
+                main();
+
+        }
+		//Check Events//
+
+		//Step Event//
+			//'A' Pressed Event//
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                player1.rotate(0.333);
+			//'A' Pressed Event//
+
+			//'D' Pressed Event//
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+                player1.rotate(-0.333);
+			//'D' Pressed Event//
+
+			//'W' Pressed Event//
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+                player1.move(5);
+			else
+				player1.move(0);
+			//'W' Pressed Event//
+
+			//Space Pressed Event//
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+                bullet.shoot();
+			//Space Pressed Event//
+
+			player1.collision_border();
+
+			while (counter < 15){
+				meteor[counter].step();
+				meteor[counter].collision_border();
+				counter++;
+			}
+			counter = 0;
+
+			bullet.step();
+		//Step Event//
+
+        //Draw Event//
+        window.clear();
+
+		window.draw(spr_back);
+
+		while (counter < 15){
+			meteor[counter].draw();
+			counter++;
+		}
+		counter = 0;
+
+		bullet.draw();
+
+		player1.draw();
+		vecship[0].draw();
+		//classship.draw();
+
+        window.display();
+		//Draw Event//
+    }
+	//Game Loop//
+
+    return 0;
+}

@@ -1,0 +1,311 @@
+#include "SFML\Graphics.hpp"
+#include <math.h>
+#include <stdlib.h>
+#include <time.h>
+
+sf::RenderWindow window(sf::VideoMode(1024, 640), "Space Game");
+
+
+class main{
+public:
+	void create(){
+		srand(time(NULL));
+	}
+
+	float random(){
+		return rand() % 1000 / 1000;
+	}
+
+}game;
+
+
+class ship{
+	sf::Texture texture;
+	sf::Texture damage0;
+	sf::Texture damage1;
+	sf::Texture damage2;
+	sf::Texture damage3;
+	sf::Sprite sprite;
+	sf::Sprite damage;
+	//float x;
+	//float y;
+
+public:
+	float x;
+	float y;
+	float rotation;
+	float health;
+
+	void create(float pos_x, float pos_y){
+		x = pos_x;
+		y = pos_y;
+
+		texture.loadFromFile("Resources/Sprites/Ships/ship_red.png");
+		damage0.loadFromFile("Resources/Sprites/Effects/damage0.png");
+		damage1.loadFromFile("Resources/Sprites/Effects/damage1.png");
+		damage2.loadFromFile("Resources/Sprites/Effects/damage2.png");
+		damage3.loadFromFile("Resources/Sprites/Effects/damage3.png");
+		sprite.setTexture(texture);
+		sprite.setScale(0.5, 0.5);
+		sprite.setOrigin(75/2, 112/2);
+		sprite.setPosition(x, y);
+		damage.setTexture(damage0);
+		damage.setScale(0.5, 0.5);
+		damage.setOrigin(75/2, 112/2);
+		damage.setPosition(x, y);
+
+		health = 100;
+	}
+
+	void draw(){
+		window.draw(sprite);
+		window.draw(damage);
+	}
+
+	void rotate(float angle){
+		sprite.rotate(-angle);
+		damage.rotate(-angle);
+	}
+
+	void move(float speed){
+		x += (speed*std::cosf(sprite.getRotation()*(3.14159/180)))/10;
+		y += (speed*std::sinf(sprite.getRotation()*(3.14159/180)))/10;
+		rotation = sprite.getRotation();
+		sprite.setPosition(x, y);
+		damage.setPosition(x, y);
+		
+		if (health > 75){
+			damage.setTexture(damage0);
+		}
+		else if (health <= 75 && health > 50){
+			damage.setTexture(damage1);
+		}
+		else if (health <= 50 && health > 25){
+			damage.setTexture(damage2);
+		}
+		else if (health <= 25 && health > 0){
+			damage.setTexture(damage3);
+		}
+		else{
+			health = 100;
+			x = rand() % 1024;
+			y = rand() % 640;
+		}
+	}
+
+	void collision_border(){
+		if (x < -50)
+			x = 1074;
+		if (x > 1074)
+			x = -50;
+		if (y < -50)
+			y = 690;
+		if (y > 690)
+			y = -50;
+	}
+
+}player1;
+
+
+class meteorite{
+	sf::Texture texture;
+	sf::Sprite sprite;
+	float spin;
+	float speed;
+	float direction;
+	
+public:
+	float x;
+	float y;
+	int radius;
+	int health;
+	int static_health;
+
+	void create(){
+		int var1 = 0;
+
+		x = rand() % 1024;
+		y = rand() % 640;
+		spin = 1 /(rand()%100+0.001);
+		speed = spin * 10;
+		direction = rand() % 360;
+
+		var1 = rand() % 10;
+		if (var1 == 0){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_big1.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 100;
+		}
+		if (var1 == 1){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_big2.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 100;
+		}
+		if (var1 == 2){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_big3.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 75;
+		}
+		if (var1 == 3){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_big4.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 75;
+		}
+		if (var1 == 4){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_med1.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 50;
+		}
+		if (var1 == 5){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_med2.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 50;
+		}
+		if (var1 == 6){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_small1.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 25;
+		}
+		if (var1 == 7){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_small2.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 25;
+		}
+		if (var1 == 8){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_tiny1.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 15;
+		}
+		if (var1 == 9){
+			texture.loadFromFile("Resources/Sprites/Meteors/brown_tiny2.png");
+			sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+			radius = texture.getSize().x/2;
+			health = 15;
+		}
+		static_health = health;
+
+		sprite.setTexture(texture);
+		sprite.setScale(1, 1);
+		sprite.setPosition(x, y);
+	}
+
+	void step(){
+		sprite.rotate(spin);
+
+		x += (speed*std::cosf(direction*(3.14159/180)))/10;
+		y += (speed*std::sinf(direction*(3.14159/180)))/10;
+		sprite.setPosition(x, y);
+
+		if (health <= 0){
+			x = rand() % 1024;
+			y = rand() % 640;
+			health = static_health;
+		}
+
+		if ((player1.x > x-radius)&&(player1.x < x+radius)&&(player1.y > y-radius)&&(player1.y < y+radius)){
+			player1.health -= radius;
+			x = rand() % 1024;
+			y = rand() % 640;
+		}
+				
+	}
+
+	void collision_border(){
+		if (x < -100)
+			direction += 180;
+		if (x > 1124)
+			direction += 180;
+		if (y < -100)
+			direction += 180;
+		if (y > 740)
+			direction += 180;
+	}
+
+	void draw(){
+		window.draw(sprite);
+	}
+
+}meteor[15];
+
+
+class gun{
+	sf::Texture texture;
+	sf::Sprite sprite;
+	sf::Time timer1;
+	sf::Time timer2;
+	float x;
+	float y;
+	float rotation;
+	int counter;
+
+public:
+	sf::Clock clock1;
+	sf::Clock clock2;
+
+	void create(){
+		texture.loadFromFile("Resources/Sprites/Effects/laser_blue.png");
+		sprite.setTexture(texture);
+		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
+		x = 2000;
+		y = 2000;
+		sprite.setPosition(2000, 2000);
+	}
+
+	void shoot(){
+		clock2.restart();
+		timer1 = clock1.getElapsedTime();
+		if (timer1.asMilliseconds() > 500){
+			x = player1.x;
+			y = player1.y;
+			rotation = player1.rotation;
+			sprite.setPosition(x, y);
+			sprite.setRotation(rotation);
+			clock1.restart();
+		}
+	}
+	void step(){
+		timer2 = clock2.getElapsedTime();
+		if ((sf::Keyboard::isKeyPressed(sf::Keyboard::W)) && (timer2.asMilliseconds() < 500)){
+			x += (15*std::cosf(rotation*(3.14159/180)))/10;
+			y += (15*std::sinf(rotation*(3.14159/180)))/10;
+		}
+		else if (!(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) && (timer2.asMilliseconds() < 500)){
+			x += (10*std::cosf(rotation*(3.14159/180)))/10;
+			y += (10*std::sinf(rotation*(3.14159/180)))/10;
+		}
+		else{
+			x = -500;
+			y = -500;
+			sprite.setPosition(-500, -500);
+		}
+
+		sprite.setPosition(x, y);
+
+		counter = 0;
+		while (counter < 15){
+			if ((x > meteor[counter].x-meteor[counter].radius)&&(x < meteor[counter].x+meteor[counter].radius)&&(y > meteor[counter].y-meteor[counter].radius)&&(y < meteor[counter].y+meteor[counter].radius)){
+				x = -500;
+				y = -500;
+				meteor[counter].health -= 21;
+			}
+			counter++;
+		}
+		counter = 0;
+	}
+
+	void draw(){
+		if (timer2.asMilliseconds() < 500){
+			window.draw(sprite);
+		}
+	}
+
+}bullet;
