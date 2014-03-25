@@ -1,0 +1,1 @@
+This is the a space shooter game made by Fifth Side Studios.  In the Imperia folder are the game's source files.  The Release folder has the main game.  This game is for Windows only.
