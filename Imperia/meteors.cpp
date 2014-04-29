@@ -7,7 +7,9 @@ sf::Texture meteor_big4;
 sf::Texture meteor_med1;
 sf::Texture meteor_med2;
 
-void meteorite::create(){
+std::list<meteorite> meteor_list;
+
+meteorite::meteorite(){
 	int var1 = 0;
 
 	x = rand() % 1024;

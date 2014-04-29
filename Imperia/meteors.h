@@ -1,3 +1,4 @@
+#include <list>
 #include <SFML\Graphics.hpp>
 #include "game.h"
 
@@ -18,6 +19,7 @@ class meteorite{
 	float direction;
 	
 public:
+	meteorite();
 	float x;
 	float y;
 	int radius;
@@ -29,5 +31,7 @@ public:
 	void collision_border();
 	void draw();
 };
+
+extern std::list<meteorite> meteor_list;
 
 #endif
