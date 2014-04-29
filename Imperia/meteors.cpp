@@ -1,5 +1,11 @@
 #include "meteors.h"
 
+sf::Texture meteor_big1;
+sf::Texture meteor_big2;
+sf::Texture meteor_big3;
+sf::Texture meteor_big4;
+sf::Texture meteor_med1;
+sf::Texture meteor_med2;
 
 void meteorite::create(){
 	int var1 = 0;
@@ -10,70 +16,13 @@ void meteorite::create(){
 	speed = spin * 10;
 	direction = rand() % 360;
 
-	var1 = rand() % 10;
-	if (var1 == 0){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_big1.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
+		sprite.setOrigin(meteor_big1.getSize().x/2,meteor_big1.getSize().y/2);
+		radius = meteor_big1.getSize().x/2;
 		health = 100;
-	}
-	if (var1 == 1){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_big2.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 100;
-	}
-	if (var1 == 2){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_big3.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 75;
-	}
-	if (var1 == 3){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_big4.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 75;
-	}
-	if (var1 == 4){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_med1.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 50;
-	}
-	if (var1 == 5){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_med2.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 50;
-	}
-	if (var1 == 6){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_small1.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 25;
-	}
-	if (var1 == 7){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_small2.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 25;
-	}
-	if (var1 == 8){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_tiny1.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 15;
-	}
-	if (var1 == 9){
-		texture.loadFromFile("Resources/Sprites/Meteors/brown_tiny2.png");
-		sprite.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-		radius = texture.getSize().x/2;
-		health = 15;
-	}
+
 	static_health = health;
 
-	sprite.setTexture(texture);
+	sprite.setTexture(meteor_big1);
 	sprite.setScale(1, 1);
 	sprite.setPosition(x, y);
 }

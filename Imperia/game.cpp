@@ -2,7 +2,7 @@
 
 
 //Create a main window for SFML//
-sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+sf::RenderWindow window(sf::VideoMode(1024, 640), "SFML works!");
 //Create a main window for SFML//
 
 //Common window get functions//
