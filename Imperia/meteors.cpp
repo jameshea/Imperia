@@ -42,6 +42,18 @@ void meteorite::step(){
 		health = static_health;
 	}
 
+	if (x < 0-radius)
+		x = 1024 + radius;
+	else if (x > 1024+radius)
+		x = 0 - radius;
+
+	if (y < 0-radius)
+		y = 640 + radius;
+	else if (y > 640+radius)
+		y = 0 - radius;
+
+
+
 	//if ((player1.x > x-radius)&&(player1.x < x+radius)&&(player1.y > y-radius)&&(player1.y < y+radius)){
 		//player1.health -= radius;
 		//x = rand() % 1024;

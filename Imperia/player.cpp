@@ -24,6 +24,7 @@ ship::ship(float pos_x, float pos_y){
 	damage.setPosition(x, y);
 
 	health = 100;
+	speed = 0;
 }
 
 void ship::draw(){
@@ -34,9 +35,10 @@ void ship::draw(){
 void ship::rotate(float angle){
 	sprite.rotate(-angle);
 	damage.rotate(-angle);
+	rotation = sprite.getRotation();
 }
 
-void ship::move(float speed){
+void ship::move(){
 	x += (speed*std::cosf(sprite.getRotation()*(3.14159/180)))/10;
 	y += (speed*std::sinf(sprite.getRotation()*(3.14159/180)))/10;
 	rotation = sprite.getRotation();
@@ -77,7 +79,7 @@ ship player1(100, 100);
 
 
 
-laser::laser(){
+laser::laser(float spd){
 	sprite.setTexture(laser_texture);
 	sprite.setOrigin(laser_texture.getSize().x/2,laser_texture.getSize().y/2);
 	x = player1.x;
@@ -86,18 +88,26 @@ laser::laser(){
 	sprite.setPosition(x, y);
 	sprite.setRotation(rotation);
 
-	speed = 60;
+	speed = spd;
 	refire.restart();
 }
 
 laser::~laser(){
 }
 
-void laser::step(std::list<laser>::iterator it){
+void laser::step(){
 	x += (speed*std::cosf(sprite.getRotation()*(3.14159/180)))/10;
 	y += (speed*std::sinf(sprite.getRotation()*(3.14159/180)))/10;
 	sprite.setPosition(x, y);
 }
+
+bool laser::done(){
+	if (live_time.getElapsedTime().asMilliseconds() >= 1000)
+		return 1;
+	else
+		return 0;
+}
+
 
 void laser::draw(){
 	window.draw(sprite);

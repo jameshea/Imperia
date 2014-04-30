@@ -7,8 +7,21 @@
 
 int main()
 {
+	//Game dependencies//
+	sf::Font font;
+	font.loadFromFile("Resources/kenvector_future_thin.ttf");
+	//Game dependencies//
+
 	//Frame dependencies//
 	sf::Clock frame;
+	
+	sf::Text fps;
+	fps.setFont(font);
+	fps.setCharacterSize(12);
+	fps.setString("0 FPS");
+	fps.setPosition(10, 0);
+	long double frames = 0;
+
 	window_set_framelimit(60);
 	//Frame dependencies//
 
@@ -20,6 +33,7 @@ int main()
 	meteor_med1.loadFromFile("Resources/Sprites/Meteors/brown_med1.png");
 	meteor_med2.loadFromFile("Resources/Sprites/Meteors/brown_med2.png");
 	laser_texture.loadFromFile("Resources/Sprites/Effects/laser_blue.png");
+	font.loadFromFile("Resources/kenvector_future_thin.ttf");
 	//File and resource loading//
 	
 	//Create Event//
@@ -44,6 +58,7 @@ int main()
 		//Check Events//
 
 		//Collision Event//
+		player1.collision_border();
 		//Collision Event//
 
 		//Step Event//
@@ -51,9 +66,24 @@ int main()
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
 				window.close();
 
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
+				player1.speed = 40;
+				player1.move();
+			}
+			else{
+				player1.speed = 0;
+			}
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)){
+				player1.rotate(3);
+			}
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+				player1.rotate(-3);
+			}
+
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
 				if (refire.getElapsedTime().asMilliseconds() >= 500){
-					laser bullet;
+					laser bullet(player1.speed + 60);
 					laser_list.push_front(bullet);
 				}
 			}
@@ -62,9 +92,9 @@ int main()
 			it->step();
 		}
 		for (std::list<laser>::iterator it = laser_list.begin(); it != laser_list.end(); ++it){
-			it->step(it);
-			if (it->live_time.getElapsedTime().asMilliseconds() >= 1000){
-				it = laser_list.erase(it);
+			it->step();
+			if (it->done()){
+				laser_list.erase(it);
 				break;
 			}
 		}
@@ -81,13 +111,18 @@ int main()
 		}
 
 		player1.draw();
+
+			//Screen overlay//
+			window.draw(fps);
+			//Screen overlay//
 		//Draw Event//
 
         window.display();
 
-        printf("%.2f \n", 1.0/frame.getElapsedTime().asSeconds());
+        frames = 1.0/frame.getElapsedTime().asSeconds();
+		fps.setString(std::to_string(frames) + " FPS");
     }
-	//Game Loop
+	//Game Loop//
 
     return 0;
 }

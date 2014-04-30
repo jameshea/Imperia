@@ -22,11 +22,12 @@ public:
 	float y;
 	float rotation;
 	float health;
+	float speed;
 
 	ship(float, float);
 	void draw();
 	void rotate(float);
-	void move(float);
+	void move();
 	void collision_border();
 
 };
@@ -45,10 +46,10 @@ class laser{
 	int counter;
 
 public:
-	laser();
+	laser(float);
 	~laser();
 	sf::Clock live_time;
-	void step(std::list<laser>::iterator);
+	void step();
 	void draw();
 	bool done();
 	void destroy();
