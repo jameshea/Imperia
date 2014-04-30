@@ -4,6 +4,7 @@
 #include "game.h"
 
 extern sf::Texture laser_texture;
+extern sf::Clock refire;
 
 class ship{
 	sf::Texture texture;
@@ -40,13 +41,15 @@ class laser{
 	float x;
 	float y;
 	float rotation;
+	float speed;
 	int counter;
 
 public:
 	laser();
-	void step();
+	void step(std::list<laser>::iterator);
 	void draw();
-
+	bool done();
+	void destroy();
 };
 
 extern ship player1;

@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include <SFML\Graphics.hpp>
 #include "game.h"
 #include "meteors.h"
@@ -33,21 +34,40 @@ int main()
     {
 		frame.restart().asSeconds();
 
-        //Pre-Step Event//
+        //Check Events//
 		sf::Event event;
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-		//Pre-Step Event//
+		//Check Events//
 
 		//Collision Event//
 		//Collision Event//
 
 		//Step Event//
+			//Keyboard Events//
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+				window.close();
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+				if (refire.getElapsedTime().asMilliseconds() >= 500){
+					laser bullet;
+					laser_list.push_front(bullet);
+				}
+			}
+			//Keyboard Events//
 		for (std::list<meteorite>::iterator it = meteor_list.begin(); it != meteor_list.end(); ++it){
 			it->step();
+		}
+		for (std::list<laser>::iterator it = laser_list.begin(); it != laser_list.end(); ++it){
+			it->step(it);
+
+			if (it->done() == 1){
+				it->destroy();
+				//laser_list.erase(it);
+			}
 		}
 		//Step Event//
 
@@ -55,6 +75,9 @@ int main()
 
 		//Draw Event//
 		for (std::list<meteorite>::iterator it = meteor_list.begin(); it != meteor_list.end(); ++it){
+			it->draw();
+		}
+		for (std::list<laser>::iterator it = laser_list.begin(); it != laser_list.end(); ++it){
 			it->draw();
 		}
 

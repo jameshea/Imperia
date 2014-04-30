@@ -3,6 +3,7 @@
 
 std::list <laser> laser_list;
 sf::Texture laser_texture;
+sf::Clock refire;
 
 ship::ship(float pos_x, float pos_y){
 	x = pos_x;
@@ -81,18 +82,38 @@ laser::laser(){
 	sprite.setOrigin(laser_texture.getSize().x/2,laser_texture.getSize().y/2);
 	x = player1.x;
 	y = player1.y;
-	sprite.setPosition(x, y);
-}
-
-void step(){
-	
-	/*rotation = player1.rotation;
+	rotation = player1.rotation;
 	sprite.setPosition(x, y);
 	sprite.setRotation(rotation);
-	clock1.restart();
-	}*/
+
+	speed = 60;
+	refire.restart();
 }
 
-void draw(){
-	//window.draw(sprite);
+void laser::step(std::list<laser>::iterator it){
+	x += (speed*std::cosf(sprite.getRotation()*(3.14159/180)))/10;
+	y += (speed*std::sinf(sprite.getRotation()*(3.14159/180)))/10;
+	sprite.setPosition(x, y);
+
+	if (live_time.getElapsedTime().asMilliseconds() >= 1000){
+		laser_list.erase(it);
+		//laser_list.pop_back();
+		//delete this;
+	}
+}
+
+bool laser::done(){
+	if (live_time.getElapsedTime().asMilliseconds() >= 1000)
+		return 1;
+	else
+		return 0;
+}
+
+void laser::destroy(){
+	delete this;
+}
+
+
+void laser::draw(){
+	window.draw(sprite);
 }
