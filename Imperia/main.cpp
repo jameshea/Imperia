@@ -63,10 +63,9 @@ int main()
 		}
 		for (std::list<laser>::iterator it = laser_list.begin(); it != laser_list.end(); ++it){
 			it->step(it);
-
-			if (it->done() == 1){
-				it->destroy();
-				//laser_list.erase(it);
+			if (it->live_time.getElapsedTime().asMilliseconds() >= 1000){
+				it = laser_list.erase(it);
+				break;
 			}
 		}
 		//Step Event//

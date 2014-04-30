@@ -90,29 +90,14 @@ laser::laser(){
 	refire.restart();
 }
 
+laser::~laser(){
+}
+
 void laser::step(std::list<laser>::iterator it){
 	x += (speed*std::cosf(sprite.getRotation()*(3.14159/180)))/10;
 	y += (speed*std::sinf(sprite.getRotation()*(3.14159/180)))/10;
 	sprite.setPosition(x, y);
-
-	if (live_time.getElapsedTime().asMilliseconds() >= 1000){
-		laser_list.erase(it);
-		//laser_list.pop_back();
-		//delete this;
-	}
 }
-
-bool laser::done(){
-	if (live_time.getElapsedTime().asMilliseconds() >= 1000)
-		return 1;
-	else
-		return 0;
-}
-
-void laser::destroy(){
-	delete this;
-}
-
 
 void laser::draw(){
 	window.draw(sprite);

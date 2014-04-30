@@ -36,7 +36,7 @@ class laser{
 	sf::Sprite sprite;
 	//sf::Time timer1;
 	//sf::Time timer2;
-	sf::Clock live_time;
+	
 	//sf::Clock clock2;
 	float x;
 	float y;
@@ -46,6 +46,8 @@ class laser{
 
 public:
 	laser();
+	~laser();
+	sf::Clock live_time;
 	void step(std::list<laser>::iterator);
 	void draw();
 	bool done();
